@@ -6,7 +6,7 @@
   "description": "3D viewer of the Rover trajectories, loop closures, laser maps and missions (WebGL2, no 3D library)",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "tsc -p tsconfig.json && node --test dist/test/",
+    "test": "tsc -p tsconfig.json && node --test \"dist/test/*.test.js\"",
     "serve": "python -m http.server 8077"
   },
   "devDependencies": {
