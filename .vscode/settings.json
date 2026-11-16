@@ -1,0 +1,11 @@
+{
+  "files.exclude": { "**/__pycache__": true, "ui/dist": true, "sim/target": true },
+  "search.exclude": { "data/euroc": true, "data/sim": true, "run": true, "ui/node_modules": true },
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["perception/tests"],
+  "cmake.sourceDirectory": "${workspaceFolder}/vio",
+  "cmake.buildDirectory": "${workspaceFolder}/vio/build",
+  "rust-analyzer.linkedProjects": ["sim/Cargo.toml"],
+  "julia.environmentPath": "mpc"
+}

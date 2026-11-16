@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rover viewer</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --ink: #1c2026; --muted: #5b6370; --line: #d9dde3;
+    --canvas: #0f1115; --accent: #2f6db0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg: #0b0d10; --panel: #15181d; --ink: #e6e8eb; --muted: #9aa3ae; --line: #2a2f37; --accent: #5aa5f0; }
+  }
+  :root[data-theme="dark"] { --bg: #0b0d10; --panel: #15181d; --ink: #e6e8eb; --muted: #9aa3ae; --line: #2a2f37; --accent: #5aa5f0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; height: 100vh; display: grid; grid-template-columns: 320px 1fr; }
+  aside { background: var(--panel); border-right: 1px solid var(--line); padding: 16px; overflow-y: auto; }
+  h1 { font-size: 18px; margin: 0 0 2px; }
+  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 18px 0 6px; }
+  h3 { font-size: 13px; margin: 10px 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 12px; }
+  select, button { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; }
+  #scene { width: 100%; }
+  button { cursor: pointer; }
+  label { display: flex; gap: 8px; align-items: center; padding: 2px 0; }
+  label.hidden { display: none; }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  #clock { font-variant-numeric: tabular-nums; color: var(--muted); min-width: 56px; }
+  ul { list-style: none; padding: 0; margin: 0; }
+  li { display: flex; gap: 8px; align-items: center; padding: 2px 0; }
+  li.ramp { gap: 6px; font-size: 12px; color: var(--muted); }
+  .bar { flex: 1; height: 8px; border-radius: 4px; }
+  .swatch { width: 18px; height: 4px; border-radius: 2px; flex: none; }
+  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+  th { text-align: left; font-weight: normal; color: var(--muted); padding: 2px 8px 2px 0; }
+  td { text-align: right; padding: 2px 0; }
+  tr + tr th, tr + tr td { border-top: 1px solid var(--line); }
+  main { position: relative; min-width: 0; }
+  canvas { width: 100%; height: 100%; display: block; touch-action: none; background: var(--canvas); }
+  .hint { position: absolute; left: 12px; bottom: 10px; color: #8b93a0; font-size: 12px; pointer-events: none; }
+  #error { color: #e5484d; }
+  @media (max-width: 760px) {
+    body { grid-template-columns: 1fr; grid-template-rows: 55vh auto; height: auto; }
+    main { order: -1; height: 55vh; }
+    aside { border-right: 0; border-top: 1px solid var(--line); }
+  }
+</style>
+</head>
+<body>
+<aside>
+  <h1>Rover</h1>
+  <p class="sub">Visual-inertial SLAM trajectories, loop closures and missions</p>
+  <select id="scene" aria-label="Scene"></select>
+  <h2>Time</h2>
+  <div class="row"><button id="play">Play</button>
+    <select id="speed" aria-label="Playback speed"><option value="1">1×</option><option value="4" selected>4×</option><option value="16">16×</option></select>
+    <span id="clock"></span><button id="fit">Fit view</button></div>
+  <input id="time" type="range" min="0" step="0.05" aria-label="Time">
+  <h2>Layers</h2>
+  <label><input type="checkbox" id="truth"> ground truth</label>
+  <label><input type="checkbox" id="estimate"> estimate</label>
+  <label><input type="checkbox" id="reference"> drive on the true pose</label>
+  <label><input type="checkbox" id="loops"> loop closures</label>
+  <label><input type="checkbox" id="cloud"> laser map</label>
+  <label><input type="checkbox" id="world"> world and plans</label>
+  <label><input type="checkbox" id="colorByError"> color the estimate by its error, white at
+    <select id="errscale" aria-label="Error scale"><option value="0.05">5 cm</option><option value="0.1">10 cm</option><option value="0.2" selected>20 cm</option><option value="0.5">50 cm</option></select></label>
+  <h2>Legend</h2>
+  <ul id="legend"></ul>
+  <h2>Metrics</h2>
+  <div id="metrics"></div>
+  <p id="error"></p>
+</aside>
+<main>
+  <canvas id="view"></canvas>
+  <div class="hint">drag: rotate · right drag or shift drag: pan · wheel or pinch: zoom</div>
+</main>
+<script type="module" src="dist/src/main.js"></script>
+</body>
+</html>

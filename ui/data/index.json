@@ -1,0 +1,82 @@
+[
+ {
+  "file": "MH_01_easy.json",
+  "name": "MH_01_easy",
+  "kind": "euroc"
+ },
+ {
+  "file": "MH_02_easy.json",
+  "name": "MH_02_easy",
+  "kind": "euroc"
+ },
+ {
+  "file": "MH_03_medium.json",
+  "name": "MH_03_medium",
+  "kind": "euroc"
+ },
+ {
+  "file": "MH_04_difficult.json",
+  "name": "MH_04_difficult",
+  "kind": "euroc"
+ },
+ {
+  "file": "MH_05_difficult.json",
+  "name": "MH_05_difficult",
+  "kind": "euroc"
+ },
+ {
+  "file": "V1_01_easy.json",
+  "name": "V1_01_easy",
+  "kind": "euroc"
+ },
+ {
+  "file": "V1_02_medium.json",
+  "name": "V1_02_medium",
+  "kind": "euroc"
+ },
+ {
+  "file": "V1_03_difficult.json",
+  "name": "V1_03_difficult",
+  "kind": "euroc"
+ },
+ {
+  "file": "V2_01_easy.json",
+  "name": "V2_01_easy",
+  "kind": "euroc"
+ },
+ {
+  "file": "V2_02_medium.json",
+  "name": "V2_02_medium",
+  "kind": "euroc"
+ },
+ {
+  "file": "V2_03_difficult.json",
+  "name": "V2_03_difficult",
+  "kind": "euroc"
+ },
+ {
+  "file": "mission_seed1.json",
+  "name": "mission, world seed 1",
+  "kind": "mission"
+ },
+ {
+  "file": "mission_seed2.json",
+  "name": "mission, world seed 2",
+  "kind": "mission"
+ },
+ {
+  "file": "mission_seed3.json",
+  "name": "mission, world seed 3",
+  "kind": "mission"
+ },
+ {
+  "file": "mission_seed4.json",
+  "name": "mission, world seed 4",
+  "kind": "mission"
+ },
+ {
+  "file": "mission_seed5.json",
+  "name": "mission, world seed 5",
+  "kind": "mission"
+ }
+]

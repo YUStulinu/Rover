@@ -1,0 +1,18 @@
+# datasets (downloaded or generated) and scratch output
+data/euroc/
+data/sim/
+data/*.log
+run/
+build/
+vio/build/
+sim/target/
+.venv/
+__pycache__/
+*.pyc
+perception/.pytest_cache/
+ui/node_modules/
+ui/dist/
+results/perception/unet.pt
+results/vio/*.log
+results/sim_vio/*.log
+mpc/Manifest.toml

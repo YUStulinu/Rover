@@ -1,0 +1,15 @@
+[project]
+name = "rover-perception"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = ["numpy", "pillow", "torch"]
+
+[project.optional-dependencies]
+baseline = ["transformers", "safetensors"]
+test = ["pytest"]
+
+[tool.setuptools]
+packages = ["rover_perception"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

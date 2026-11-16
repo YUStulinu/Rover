@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  vio:
+    name: C++ odometry and SLAM (unit tests)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: cmake -S vio -B vio/build -DROVER_NATIVE=OFF && cmake --build vio/build -j 4
+      - name: Unit tests
+        run: ctest --test-dir vio/build --output-on-failure
+
+  closed-loop:
+    name: Simulator, odometry on simulated data, MPC missions
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: "1"
+      - name: Simulator tests and build
+        run: cd sim && cargo test --release && cargo build --release
+      - name: Build the odometry
+        run: cmake -S vio -B vio/build -DROVER_NATIVE=OFF && cmake --build vio/build -j 4
+      - name: Controller tests
+        run: julia --project=mpc -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
+      - name: Odometry on a simulated lap (ATE under 15 cm)
+        run: |
+          sim/target/release/rover-sim generate run/ci_world --seed 7 --obstacles 6 --laps 1
+          vio/build/rover-vio run/ci_world --json run/ci_vio.json > /dev/null
+          cat run/ci_vio.json
+          python3 -c "import json,sys; r=json.load(open('run/ci_vio.json')); sys.exit(0 if r['ate_final_m'] < 0.15 else 1)"
+      - name: A mission driven on the odometry (all goals, no collision)
+        run: |
+          julia --project=mpc mpc/run_missions.jl 3
+          python3 -c "
+          import json,sys
+          for tag in ('gt','vio'):
+              m=json.load(open(f'results/missions/seed3_{tag}.json'))['metrics']; print(tag, m)
+              assert m['reached']==m['goals'] and not m['collided'], tag
+          "
+
+  perception:
+    name: Perception (Python, CPU)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install torch --index-url https://download.pytorch.org/whl/cpu && pip install numpy pillow pytest
+      - name: Tests
+        run: cd perception && python -m pytest -q
+
+  viewer:
+    name: 3D viewer (TypeScript)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Build and test
+        run: cd ui && npm ci && npm test

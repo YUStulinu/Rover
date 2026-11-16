@@ -1,0 +1,16 @@
+{
+  "name": "rover-viewer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "3D viewer of the Rover trajectories, loop closures, laser maps and missions (WebGL2, no 3D library)",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "tsc -p tsconfig.json && node --test dist/test/",
+    "serve": "python -m http.server 8077"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "5.9.3"
+  }
+}
